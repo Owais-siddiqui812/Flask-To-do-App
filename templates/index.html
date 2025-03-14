@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            margin: 20px;
+        }
+        h1 {
+            color: #343a40;
+        }
+        form {
+            margin: 10px 0;
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 8px 12px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: white;
+            padding: 10px;
+            margin: 5px auto;
+            width: 300px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        a {
+            text-decoration: none;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+        .delete {
+            color: red;
+        }
+        .complete {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>My To-Do List</h1>
+    
+    <form action="/add" method="post">
+        <input type="text" name="task" placeholder="Enter your task" required>
+        <button type="submit">Add</button>
+    </form>
+
+    <ul>
+        {% for task in tasks %}
+            <li>
+                {{ task.title }} [Completed: {{ 'Yes' if task.Completed else 'No' }}]
+                <a href="/delete/{{ task.id }}" class="delete">❌</a>
+                <a href="/completed/{{ task.id }}" class="complete">✅</a>
+            </li>
+        {% endfor %}
+    </ul>
+    
+    <form action="/logout" method="GET">
+        <button type="submit">Logout</button>
+    </form>
+    
+    <form action="/clear" method="post">
+        <button type="submit">Clear All</button>
+    </form>
+</body>
+</html>
