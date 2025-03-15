@@ -105,14 +105,7 @@ def completed(task_id):
     task_c=Task.query.get(task_id)
     task_c.Completed=True
     db.session.commit()
-    return redirect('/')
-
-@app.route('/Edit/<int:taks_id>')
-def edit(taks_id):
-    if 'user_id' not in session:
-        return redirect('/login')
-    return redirect('/')
-    
+    return redirect('/')    
 
 @app.route('/clear',methods=['POST'])
 def clear():
