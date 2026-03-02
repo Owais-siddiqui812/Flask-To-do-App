@@ -3,90 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My To-Do List</title>
+    <title>My Todo List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            text-align: center;
-            margin: 20px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        h1 {
-            color: #343a40;
-        }
-        form {
-            margin: 10px 0;
-        }
-        input[type="text"] {
+        th, td {
+            border: 1px solid #ddd;
             padding: 8px;
-            width: 250px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            text-align: left;
         }
-        button {
-            padding: 8px 12px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
+        th {
+            background-color: #f4f4f4;
         }
-        button:hover {
-            background-color: #0056b3;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            background: white;
-            padding: 10px;
-            margin: 5px auto;
-            width: 300px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-        }
-        a {
-            text-decoration: none;
-            font-size: 18px;
-            margin-left: 10px;
-        }
-        .delete {
-            color: red;
-        }
-        .complete {
-            color: green;
+        .completed {
+            text-decoration: line-through;
+            color: gray;
         }
     </style>
 </head>
 <body>
-    <h1>My To-Do List</h1>
+    <h1>My Todo List</h1>
     
     <form action="/add" method="post">
         <input type="text" name="task" placeholder="Enter your task" required>
+        <input type="date" name="start_date" required>
+        <input type="date" name="end_date" required>
         <button type="submit">Add</button>
     </form>
 
-    <ul>
-        {% for task in tasks %}
-            <li>
-                {{ task.title }} [Completed: {{ 'Yes' if task.Completed else 'No' }}]
-                <a href="/delete/{{ task.id }}" class="delete">❌</a>
-                <a href="/completed/{{ task.id }}" class="complete">✅</a>
-            </li>
-        {% endfor %}
-    </ul>
-    
-    <form action="/logout" method="GET">
-        <button type="submit">Logout</button>
-    </form>
-    
+    <table>
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+       <tbody>
+    {% for task in tasks %}
+    <tr>
+        <td class="{% if task.completed %}completed{% endif %}">
+            {{ task.n_task }}
+        </td>
+        <td>{{ task.start_date }}</td>
+        <td>{{ task.end_date }}</td>
+        <td>
+            {% if task.completed %}
+                <i class="fa-solid fa-check"></i> Completed
+            {% else %}
+                {{ task.status }}
+            {% endif %}
+        </td>
+        <td>
+            {% if not task.completed %}
+                <a href="/completed/{{ task.id }}" class="complete-link">
+                    <i class="fa-solid fa-check"></i> Mark as Completed
+                </a>
+            {% endif %}
+            <a href="/delete/{{ task.id }}" class="delete-link"> <i class="fa-solid fa-trash"></i> Delete
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+    </table>
+
     <form action="/clear" method="post">
-        <button type="submit">Clear All</button>
+        <button type="submit">Clear all</button>
+         
+    <a href="/logout" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Logout  </a>
+
     </form>
+  
 </body>
 </html>
